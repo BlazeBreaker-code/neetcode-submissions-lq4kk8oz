@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // We can solve this by bucket sort, we first need the freq
+        std::unordered_map<int, int> freqMap;
+        for (int num : nums) ++freqMap[num];
+
+        // now we need to make our buckets
+        vector<vector<int>> buckets(nums.size() + 1);
+        for (auto [num, freq] : freqMap) buckets[freq].push_back(num);
+
+        vector<int> ans;
+        ans.reserve(k);
+
+        for (int i = buckets.size() - 1; i >= 0 && ans.size() < k; --i) {
+            for (int num : buckets[i]) {
+                ans.push_back(num);
+                if (ans.size() == k) return ans;
+            }
+        }
+
+        return ans;
+    }
+};
